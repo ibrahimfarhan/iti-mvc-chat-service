@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body style="margin-top: 1rem;">
+    <div class="container chat-container">
+
+        <!-- Chat navigation -->
+        <div class="row">
+            <!-- List of users -->
+            <div class="col-3">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
+                       aria-controls="v-pills-home" aria-selected="true">User 1</a>
+
+                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab"
+                       aria-controls="v-pills-settings" aria-selected="false">User 2</a>
+                </div>
+            </div>
+
+            <!-- Message containers -->
+            <div class="col-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                         aria-labelledby="v-pills-home-tab">
+
+                        <div class="chat-container__message-container message-container">
+                            <div class="message-container__line">
+                                <p class="message-container__name">Ibrahim: </p><p class="chat-message">Sent<i class="chat-message__icon fas fa-check-double ml-1"></i></p>
+                            </div>
+                            <div class="message-container__line">
+                                <p class="message-container__name">Ibrahim: </p><p class="chat-message">Sent<i class="chat-message__icon fas fa-check ml-1"></i></p>
+                            </div>
+                            <div class="message-container__line">
+                                <p class="message-container__name">Ibrahim: </p><p class="chat-message">Sent<i class="chat-message__icon far fa-clock"></i></p>
+                            </div>
+                            <div class="message-container__line">
+                                <p class="message-container__name">Ibrahim: </p><p class="chat-message">Sent<i class="chat-message__icon far fa-clock"></i></p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
+                         aria-labelledby="v-pills-settings-tab">...</div>
+                </div>
+
+                <!-- Chat textbox -->
+                <div class="form-inline msg-form">
+                    <input class="form-control msg-textbox col-10" type="text" placeholder="Default input">
+                    <button type="button" class="btn btn-primary ml-2 send-msg-btn">Send</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/446b3e135c.js" crossorigin="anonymous"></script>
+</body>
+
+</html>

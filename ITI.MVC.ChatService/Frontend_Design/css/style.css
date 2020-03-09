@@ -1,0 +1,26 @@
+.message-container {
+  border: gray solid 1px;
+  border-radius: 10px;
+  padding: 1rem;
+  height: 20rem;
+  overflow: scroll; }
+  .message-container__line {
+    display: flex;
+    flex-wrap: wrap; }
+  .message-container__name {
+    align-self: center;
+    margin-right: 1rem; }
+
+.msg-form {
+  justify-content: space-between; }
+
+.chat-container__message-container {
+  margin-bottom: 1rem; }
+
+.chat-message {
+  border-radius: 10px;
+  border: gray solid 1px;
+  padding: 0.2rem 0.5rem; }
+  .chat-message__icon {
+    font-size: 0.7rem;
+    margin-left: 0.5rem; }

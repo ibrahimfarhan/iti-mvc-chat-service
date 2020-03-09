@@ -1,0 +1,17 @@
+.message-container {
+    border: gray solid 1px;
+    border-radius: 10px;
+    padding: 1rem;
+    height: 20rem;
+    overflow: scroll;
+
+    &__line {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    &__name {
+        align-self: center;
+        margin-right: 1rem;
+    }
+}

@@ -1,0 +1,10 @@
+.chat-message {
+    border-radius: 10px;
+    border: gray solid 1px;
+    padding: 0.2rem 0.5rem;
+
+    &__icon {
+        font-size: 0.7rem;
+        margin-left: 0.5rem;
+    }
+}
