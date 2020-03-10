@@ -16,7 +16,7 @@ namespace ITI.MVC.ChatService
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Chat", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

@@ -15,7 +15,7 @@ namespace ITI.MVC.ChatService.Models.Entities
         public virtual ICollection<ChatConnection> ChatConnections { get; set; }
 
         [InverseProperty("Sender")]
-        public virtual ICollection<Chat> Chats { get; set; }
+        public virtual ICollection<ChatMessage> ChatMessages { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

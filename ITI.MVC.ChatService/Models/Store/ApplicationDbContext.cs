@@ -21,6 +21,6 @@ namespace ITI.MVC.ChatService.Models.Store
         }
 
         public virtual DbSet<ChatConnection> ChatConnections { get; set; }
-        public virtual DbSet<Chat> Chats { get; set; }
+        public virtual DbSet<ChatMessage> ChatMessages { get; set; }
     }
 }

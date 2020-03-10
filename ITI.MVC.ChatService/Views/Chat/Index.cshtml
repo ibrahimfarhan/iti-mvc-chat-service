@@ -1,0 +1,67 @@
+﻿@model ChatPageViewModel
+
+@{
+    ViewBag.Title = "Index";
+    bool isFirstUser = true;
+}
+
+<div class="container chat-container">
+
+    <!-- Chat navigation -->
+    <div class="row">
+        <!-- List of users -->
+        <div class="col-3">
+
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+                @foreach (var user in Model.Users)
+                {
+                    <a class="nav-link active user-in-list"
+                       id=@("v-pills-" + user.Id + "-tab")
+                       data-userid="@user.Id"
+                       data-toggle="pill"
+                       href=@("#v-pills-" + user.Id) role="tab"
+                       aria-controls=@("v-pills-" + user.Id) aria-selected="@isFirstUser.ToString().ToLower()"
+                       data-isfirstuser="@isFirstUser.ToString().ToLower()">@user.UserName</a>
+
+                    @(isFirstUser = false; )
+                }
+
+            </div>
+        </div>
+
+        <!-- Message containers -->
+        <div class="col-9">
+            <div class="tab-content" id="v-pills-tabContent">
+                @Html.Partial("_MessageContainer", Model.MessageContainerViewModel)
+            </div>
+
+            <!-- Chat textbox -->
+            <div class="form-inline msg-form" id="msgForm">
+                <input id="msgTextbox" class="form-control msg-textbox col-10" type="text" placeholder="Default input">
+                <button id="msgFormSendBtn" type="button" class="btn btn-primary ml-2 send-msg-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/446b3e135c.js" crossorigin="anonymous"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="~/Scripts/Chat/chat.js"></script>
+}
+
+@section styles {
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Frontend_Design/css/style.css">
+}

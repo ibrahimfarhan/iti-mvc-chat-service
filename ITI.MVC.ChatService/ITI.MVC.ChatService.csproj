@@ -177,6 +177,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Frontend_Design\node_modules\node-gyp\lib\Find-VS2017.cs" />
@@ -187,14 +188,30 @@
     <Compile Include="Migrations\202003091649459_Init.Designer.cs">
       <DependentUpon>202003091649459_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003100823397_AddMessageStatus.cs" />
+    <Compile Include="Migrations\202003100823397_AddMessageStatus.Designer.cs">
+      <DependentUpon>202003100823397_AddMessageStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003100835319_ChangeChatTableName.cs" />
+    <Compile Include="Migrations\202003100835319_ChangeChatTableName.Designer.cs">
+      <DependentUpon>202003100835319_ChangeChatTableName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003101318253_AddIdForChatMessage.cs" />
+    <Compile Include="Migrations\202003101318253_AddIdForChatMessage.Designer.cs">
+      <DependentUpon>202003101318253_AddIdForChatMessage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Enums\MessageStatus.cs" />
+    <Compile Include="Models\ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\Entities\ApplicationUser.cs" />
-    <Compile Include="Models\Entities\Chat.cs" />
+    <Compile Include="Models\Entities\ChatMessage.cs" />
     <Compile Include="Models\Entities\ChatConnection.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ViewModels\ChatPageViewModel.cs" />
+    <Compile Include="Models\ViewModels\ManageViewModels.cs" />
     <Compile Include="Models\Store\ApplicationDbContext.cs" />
+    <Compile Include="Models\ViewModels\MessageContainerViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SignalR\ChatHub.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2243,6 +2260,7 @@
     <Content Include="Frontend_Design\node_modules\yargs\lib\yerror.js" />
     <Content Include="Frontend_Design\node_modules\yargs\node_modules\camelcase\index.js" />
     <Content Include="Frontend_Design\node_modules\yargs\yargs.js" />
+    <Content Include="Frontend_Design\test-script.js" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
@@ -3312,6 +3330,7 @@
     <Content Include="Frontend_Design\sass\components\_msg-form.scss" />
     <Content Include="Frontend_Design\sass\main.scss" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\Chat\chat.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -3356,10 +3375,12 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Chat\Index.cshtml" />
+    <Content Include="Views\Chat\_MessageContainer.cshtml" />
+    <Content Include="Views\Chat\_Message.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="SignalR\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -3414,6 +3435,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202003091649459_Init.resx">
       <DependentUpon>202003091649459_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003100823397_AddMessageStatus.resx">
+      <DependentUpon>202003100823397_AddMessageStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003100835319_ChangeChatTableName.resx">
+      <DependentUpon>202003100835319_ChangeChatTableName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003101318253_AddIdForChatMessage.resx">
+      <DependentUpon>202003101318253_AddIdForChatMessage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
