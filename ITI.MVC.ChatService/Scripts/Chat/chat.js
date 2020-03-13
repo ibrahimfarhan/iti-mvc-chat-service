@@ -1,10 +1,16 @@
-﻿let chatContainer = document.getElementById("v-pills-tabContent"),
+﻿// DOM elements
+
+let chatContainer = document.getElementById("v-pills-tabContent"),
     messageContainer = document.getElementById("messageContainer"),
     usersList = document.getElementById("v-pills-tab"),
     msgTextbox = document.getElementById("msgTextbox"),
+    msgForm = document.getElementById("msgForm"),
     msgFormSendBtn = document.getElementById("msgFormSendBtn");
 
-let targetUserId = document.querySelector(`[data-isfirstuser="true"]`);
+// Global variables
+
+let targetUserId = document.querySelector(`[data-isfirstuser="true"]`).getAttribute("data-userid"),
+    typingIsDisplayed = false;
 
 let messageIconClasses = {
     Sent: "fas fa-check",
@@ -17,7 +23,21 @@ let messageIconClasses = {
 
 let chatHub = $.connection.chatHub;
 
-chatHub.client.displayMessage = (senderUserName, message, messageStatus) => {
+chatHub.client.displayIncomingMessage = (senderUserName, message) => {
+
+    let messageHtml = `<div class="message-container__line">
+                            <p class="message-container__name">${senderUserName}</p>
+                            <p class="chat-message">
+                                ${message}
+                            </p>
+                        </div>`;
+
+    messageContainer.innerHTML += messageHtml;
+
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+};
+
+chatHub.client.displayOutgoingMessage = (senderUserName, message, messageStatus) => {
 
     let icon = "";
 
@@ -26,13 +46,17 @@ chatHub.client.displayMessage = (senderUserName, message, messageStatus) => {
         icon = `<i class="chat-message__icon ${messageIconClasses[messageStatus]} ml-1"></i>`;
     }
 
-    let messageHtml = `<p class="message-container__name">${senderUserName}</p>
-                    <p class="chat-message">
-                        ${message}
-                        ${icon}
-                    </p>`;
+    let messageHtml = `<div class="message-container__line">
+                            <p class="message-container__name text-primary">${senderUserName}</p>
+                            <p class="chat-message">
+                                ${message}
+                                ${icon}
+                            </p>
+                        </div>`;
 
     messageContainer.innerHTML += messageHtml;
+
+    messageContainer.scrollTop = messageContainer.scrollHeight;
 };
 
 chatHub.client.changeMessageStatus = (messageId, newStatus) => {
@@ -46,18 +70,33 @@ chatHub.client.displayTyping = typingUserId => {
 
     let userNameDiv = document.querySelector(`[data-userid="${typingUserId}"]`);
 
-    userNameDiv.innerHTML += `<small class="ml-2">typing...</small>`;
+    if (!typingIsDisplayed) {
+
+        let typingDiv = userNameDiv.querySelector(".typing");
+        typingDiv.style.display = "block";
+        typingIsDisplayed = true;
+    }
 };
 
-$.connection.hub.start();
+chatHub.client.removeTyping = typingUserId => {
 
-// Test SignalR
-chatHub.server.hello();
+    let userNameDiv = document.querySelector(`[data-userid="${typingUserId}"]`);
+
+    if (typingIsDisplayed) {
+
+        let typingDiv = userNameDiv.querySelector(".typing");
+        typingDiv.style.display = "none";
+        typingIsDisplayed = false;
+    }
+}
+
+$.connection.hub.start().done();
 
 // Register events.
 
 usersList.addEventListener("click", onUsersListClick);
-msgTextbox.addEventListener("change", onMsgTextboxChange);
+msgTextbox.addEventListener("input", onMsgTextboxInput);
+msgForm.addEventListener("submit", onMsgFormSubmit);
 msgFormSendBtn.addEventListener("click", onMsgSendBtnClick);
 
 // Handle getting chat messages with a specific user.
@@ -70,7 +109,7 @@ function onUsersListClick(e) {
 
     if (e.target.classList.contains("user-in-list")) {
 
-        targetUserId = e.target.getAttribute("data-userid");
+        targetUserId = e.target.getAttribute("data-userid").getAttribute("data-userid");
         getMessagesPartialView(targetUserId);
     }
 }
@@ -86,18 +125,34 @@ async function getMessagesPartialView(targetUserId) {
     }
 }
 
-//Handle message form behaviour.
+// Handle message form behaviour.
 
-function onMsgTextboxChange(e) {
+function onMsgFormSubmit(e) {
+
+    e.preventDefault();
+    msgTextbox.value = "";
+    chatHub.server.removeTyping(targetUserId);
+}
+
+function onMsgTextboxInput(e) {
 
     if (e.target.value.trim() !== "") {
 
         chatHub.server.displayTyping(targetUserId);
     }
+
+    else {
+        chatHub.server.removeTyping(targetUserId);
+    }
 }
 
 function onMsgSendBtnClick() {
 
-    chatHub.server.sendMessage(message, targetUserId);
-}
+    let message = msgTextbox.value;
 
+    if (message.trim() === "") {
+        return;
+    }
+
+    chatHub.server.sendMessage(targetUserId, message);
+}

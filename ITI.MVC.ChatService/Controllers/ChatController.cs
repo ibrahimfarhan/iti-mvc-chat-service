@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace ITI.MVC.ChatService.Controllers
 {
+    [Authorize]
     public class ChatController : Controller
     {
         private ApplicationDbContext dbCtx;
@@ -26,15 +27,17 @@ namespace ITI.MVC.ChatService.Controllers
         // GET: Chat
         public ActionResult Index()
         {
-            var users = DbCtx.Users.ToList();
+            var currentUserId = User.Identity.GetUserId();
 
-            var messageContainerViewModel = new MessageContainerViewModel
+            var users = DbCtx.Users.Where(u => u.Id != currentUserId).ToList();
+
+            var messageContainerViewModel = users.Count != 0 ? new MessageContainerViewModel
             {
                 IsFirstUser = true,
                 CurrentUser = DbCtx.Users.Find(User.Identity.GetUserId()),
                 ChatMessages = GetCurrentUserMessagesWith(users[0].Id),
-                Receiver = users[0]
-            };
+                Receiver = users[0] ?? null
+            } : new MessageContainerViewModel();
 
             return View(new ChatPageViewModel
             {
@@ -56,7 +59,7 @@ namespace ITI.MVC.ChatService.Controllers
                 Receiver = DbCtx.Users.Find(targetUserId)
             };
 
-            return PartialView("_MessageContainer", messageContainerViewModel);
+            return PartialView("_Messages", messageContainerViewModel);
         }
 
         // TODO: Transfer this function to signalR.
@@ -91,10 +94,11 @@ namespace ITI.MVC.ChatService.Controllers
         /// <returns>A list of chat messages</returns>
         private List<ChatMessage> GetCurrentUserMessagesWith(string targetUserId)
         {
+            string currentUserId = User.Identity.GetUserId();
             return DbCtx.ChatMessages.
                 Where(c =>
-                (c.ReceiverId == targetUserId && c.SenderId == User.Identity.GetUserId()) ||
-                (c.ReceiverId == User.Identity.GetUserId() && c.SenderId == targetUserId)).
+                (c.ReceiverId == targetUserId && c.SenderId == currentUserId) ||
+                (c.ReceiverId == currentUserId && c.SenderId == targetUserId)).
                 OrderBy(c => c.Time).
                 ToList();
         }

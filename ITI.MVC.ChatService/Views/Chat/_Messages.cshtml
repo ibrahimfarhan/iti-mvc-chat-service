@@ -1,0 +1,40 @@
+﻿@model MessageContainerViewModel
+
+@foreach (var message in Model.ChatMessages)
+{
+    <div class="message-container__line">
+
+        @if (message.SenderId == Model.CurrentUser.Id)
+        {
+            <p class="message-container__name text-primary">@Model.CurrentUser.UserName: </p>
+            <p class="chat-message">
+                @message.Message
+
+                @if (message.MessageStatus == MessageStatus.Sent)
+                {
+                    <i id="messageIcon#@message.Id" class="chat-message__icon fas fa-check ml-1"></i>
+                }
+                else if (message.MessageStatus == MessageStatus.Received)
+                {
+                    <i id="messageIcon#@message.Id" class="chat-message__icon fas fa-check-double ml-1"></i>
+                }
+                else if (message.MessageStatus == MessageStatus.Read)
+                {
+                    <i id="messageIcon#@message.Id" class="chat-message__icon fas fa-check-double ml-1 text-primary"></i>
+                }
+                else
+                {
+                    <i id="messageIcon#@message.Id" class="chat-message__icon far fa-clock"></i>
+                }
+            </p>
+        }
+
+        else
+        {
+            <p class="message-container__name">@Model.Receiver.UserName: </p>
+            <p class="chat-message">
+                @message.Message
+            </p>
+        }
+    </div>
+}
