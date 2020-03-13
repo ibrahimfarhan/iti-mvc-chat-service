@@ -37,13 +37,13 @@ chatHub.client.displayIncomingMessage = (senderUserName, message) => {
     messageContainer.scrollTop = messageContainer.scrollHeight;
 };
 
-chatHub.client.displayOutgoingMessage = (senderUserName, message, messageStatus) => {
+chatHub.client.displayOutgoingMessage = (senderUserName, message, messageStatus, messageId) => {
 
     let icon = "";
 
     if (messageStatus) {
 
-        icon = `<i class="chat-message__icon ${messageIconClasses[messageStatus]} ml-1"></i>`;
+        icon = `<i id="messageIcon#${messageId}" class="chat-message__icon ${messageIconClasses[messageStatus]} ml-1"></i>`;
     }
 
     let messageHtml = `<div class="message-container__line">
@@ -88,16 +88,7 @@ chatHub.client.removeTyping = typingUserId => {
         typingDiv.style.display = "none";
         typingIsDisplayed = false;
     }
-}
-
-$.connection.hub.start().done();
-
-// Register events.
-
-usersList.addEventListener("click", onUsersListClick);
-msgTextbox.addEventListener("input", onMsgTextboxInput);
-msgForm.addEventListener("submit", onMsgFormSubmit);
-msgFormSendBtn.addEventListener("click", onMsgSendBtnClick);
+};
 
 // Handle getting chat messages with a specific user.
 
@@ -146,6 +137,11 @@ function onMsgTextboxInput(e) {
     }
 }
 
+function onMsgTextboxFocus() {
+
+    chatHub.server.markReceivedMessagesAsRead();
+}
+
 function onMsgSendBtnClick() {
 
     let message = msgTextbox.value;
@@ -156,3 +152,29 @@ function onMsgSendBtnClick() {
 
     chatHub.server.sendMessage(targetUserId, message);
 }
+
+// Handle closing signalR connection.
+function onWindowClosing() {
+
+    chatHub.server.removeCurrentConnection();
+    $.connection.hub.stop();
+}
+
+function init() {
+
+    // Start signalR.
+    $.connection.hub.start().done();
+
+    // Register events.
+    usersList.addEventListener("click", onUsersListClick);
+    msgTextbox.addEventListener("input", onMsgTextboxInput);
+    msgTextbox.addEventListener("focus", onMsgTextboxFocus);
+    msgForm.addEventListener("submit", onMsgFormSubmit);
+    msgFormSendBtn.addEventListener("click", onMsgSendBtnClick);
+    window.addEventListener("beforeunload", onWindowClosing);
+
+    // Display latest messages.
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+}
+
+init();

@@ -1,3 +1,4 @@
+using ITI.MVC.ChatService.Models.Store;
 using System;
 using System.Collections.Generic;
 using System.Linq;
